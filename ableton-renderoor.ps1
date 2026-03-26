@@ -30,56 +30,64 @@ $numFiles = $files.Length
 
 Write-Host "Found $numFiles projects"
 
+# TODO: Put all wait times here
 $counter = 0
+$skipCount = 0 # set to Processing [57 .. upon termination
 foreach ($file in $files) {
     $counter = $counter + 1
 
-    Write-Host "Processing [$counter of $numFiles]"
+    if ($counter -ge $skipCount) {
 
-    # Open the file with its default application
-    $name = $file.FullName
-    Write-Host "Opened $name"
-    Start-Process $name
-    Write-Host "Opened $file"
+        Write-Host "Processing [$counter of $numFiles]"
 
-    # Wait 5 seconds
-    Start-SleepWithProgress -Seconds 1
+        # Open the file with its default application
+        $name = $file.FullName
+        Write-Host "Opened $name"
+        Start-Process $name
+        Write-Host "Opened $file"
 
-    # Press N
-    ActivateAbleton
-    [System.Windows.Forms.SendKeys]::SendWait("n")
-    Write-Host "Pressed N"
-    [System.Windows.Forms.SendKeys]::SendWait("n")
-    Write-Host "Pressed N"
+        # Wait 5 seconds
+        Start-SleepWithProgress -Seconds 1
 
-    # Wait 10 seconds
-    Start-SleepWithProgress -Seconds 10
+        # Press N
+        ActivateAbleton
+        [System.Windows.Forms.SendKeys]::SendWait("n")
+        Start-SleepWithProgress -Seconds 2
+        Write-Host "Pressed N"
+        Start-SleepWithProgress -Seconds 2
+        ActivateAbleton
+        [System.Windows.Forms.SendKeys]::SendWait("n")
+        Write-Host "Pressed N"
 
-    # Send Ctrl+Shift+R
-    ActivateAbleton
-    [System.Windows.Forms.SendKeys]::SendWait("^+r")
-    Write-Host "Sent Ctrl+Shift+R"
+        # Wait 10 seconds
+        Start-SleepWithProgress -Seconds 10
 
-    # Wait 5 seconds
-    Start-SleepWithProgress -Seconds 5
+        # Send Ctrl+Shift+R
+        ActivateAbleton
+        [System.Windows.Forms.SendKeys]::SendWait("^+r")
+        Write-Host "Sent Ctrl+Shift+R"
 
-    # Press Enter
-    ActivateAbleton
-    [System.Windows.Forms.SendKeys]::SendWait("~")
-    Write-Host "Pressed Enter"
+        # Wait 5 seconds
+        Start-SleepWithProgress -Seconds 5
 
-    # Wait 5 seconds
-    Start-SleepWithProgress -Seconds 5
+        # Press Enter
+        ActivateAbleton
+        [System.Windows.Forms.SendKeys]::SendWait("~")
+        Write-Host "Pressed Enter"
 
-    # Press Enter
-    ActivateAbleton
-    [System.Windows.Forms.SendKeys]::SendWait("~")
-    Write-Host "Pressed Enter"
+        # Wait 5 seconds
+        Start-SleepWithProgress -Seconds 5
 
-    # Wait 3 minutes
-    # TODO wait for output folder to change
-    # Start-Sleep -Seconds 180
-    Start-SleepWithProgress -Seconds 45
+        # Press Enter
+        ActivateAbleton
+        [System.Windows.Forms.SendKeys]::SendWait("~")
+        Write-Host "Pressed Enter"
+
+        # Wait 3 minutes
+        # TODO wait for output folder to change
+        # Start-Sleep -Seconds 180
+        Start-SleepWithProgress -Seconds 45
+    }
 }
 
 Write-Host "Done processing all files."
